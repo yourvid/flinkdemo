@@ -1,0 +1,30 @@
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+#kafka生产者
+  kafka:
+    producer:
+      bootstrap-servers: 10.10.254.138:9092
+      batch-size: 16384 #当有多个消息需要被发送到同一个分区时，生产者会把它们放在同一个批次里。该参数指定了一个批次可以使用的内存大小，按照字节数计算。
+      buffer-memory: 33554432 #设置生产者内存缓冲区的大小。
+      retries: 0 #发生错误后，消息重发的次数
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer #com.orieange.platform.server.base.kafaka.seralizer.KafkaSeralizer
+      #ack: 0 #生产者在成功写入消息之前不会等待任何来自服务器的响应。
+      # acks=1 ： 只要集群的首领节点收到消息，生产者就会收到一个来自服务器成功响应。
+      # acks=all ：只有当所有参与复制的节点全部收到消息时，生产者才会收到一个来自服务器的成功响应。
+      acks: 1
+      linger: 0
+logging:
+  config: classpath:log4j2.xml
+#fafka发送消息线程池参数
+kafka:
+  threadlistener:
+    corePoolSize: 3
+    maxPoolSize: 5
+    poolQueueCapacity: 5
+    threadNamePrefix: kafka_send
+    visiblePool: true
+    visibleLog: true
+    listenerQueueSize: 2
